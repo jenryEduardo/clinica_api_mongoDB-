@@ -3,15 +3,14 @@ const app=express()
 
 require('dotenv').config();
 
-const userRoutes=require('./src/routes/user.routes.js')
 const inventoryRoutes=require('./src/routes/inventory.routes.js')
-const camillaRoutes=require('./src/routes/camilla.routes.js')
 app.use(express.json());
 
 
-app.use('/user',userRoutes)
+//PROFE LA VERDAD SOLO DEJE UNA COLECCION QUE ES INVENTARIO YA QUE LO DEMAS VI MEJOR EN POSTGRESQL YA QUE NINGUN DATO CAMBIA
+//MIENTRAS QUE EN INVENTARIO SI
+
 app.use('/inventory',inventoryRoutes)
-app.use('/camilla',camillaRoutes)
 
 const port=process.env.PORT||4000;
 

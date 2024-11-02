@@ -44,9 +44,46 @@ async function deleteProductos(id) {
  }
 }
 
+
+async function addPresentation(datos) {
+  try {
+    const db=await connectionDB()
+    const result =await db.collection('inventory').updateOne(
+      {nombre:datos.nombre},
+      {$push:{presentacion:datos.presentacion}} 
+    )
+    console.log(result);
+    
+  } catch (error) {
+    console.log("error", error);
+    
+  }
+}
+
+
+async function modificarCantidadPresentacion(datos) {
+  try {
+    const db= await connectionDB()
+    const result = await db.collection('inventory').updateOne(
+      {nombre:datos.nombre},
+      {$set:{'presentacion.$[element].cantidad':datos.cantidad}},
+      // ojala pudiera cambiar todos mis recuerdos asi de facil y olvidarla unu
+      //psdt el metodo element se utliza para actualizar elementos de un array 
+      //en el documento y se actuliza si comple con cierto requisito que se establecen en arrayFilters
+      {arrayFilters:[{'element.gramaje':datos.gramaje, 'element.patente':datos.patente}]}
+    )
+
+    console.log("datos actualizados "+result);
+  } catch (error) {
+    throw error
+  }
+}
+
 module.exports={  
     agregarInventario,
     encontrarProducto,
     actualizarProducto,
-    deleteProductos
+    deleteProductos,
+    addPresentation,
+    modificarCantidadPresentacion
 }

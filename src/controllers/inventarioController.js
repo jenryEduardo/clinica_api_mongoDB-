@@ -1,4 +1,4 @@
-const {agregarInventario,encontrarProducto, actualizarProducto, deleteProductos} =require('../models/inventario.js')
+const {agregarInventario,encontrarProducto, actualizarProducto, deleteProductos, addPresentation, modificarCantidadPresentacion} =require('../models/inventario.js')
 
 async function addInventory(req,res) {
    try {
@@ -34,6 +34,17 @@ async function actualizar(req,res) {
 }
 
 
+async function agregarPresentacion(req,res) {
+   const datos=req.body
+    try {   
+      await addPresentation(datos)
+      res.status(201).json({succesfull:"presentacion agregada exitosamente"})
+    } catch (error) {
+      throw error
+    }
+}
+
+
 async function deleteProduct(req,res) {
 try {
   console.log(req.params);
@@ -45,9 +56,22 @@ try {
 }
 }
 
+
+async function updatequantityMedicament(req,res) {
+ try {
+  const datos=req.body
+  await modificarCantidadPresentacion(datos)
+  res.status(201).json({succesfull:"datos actualizados"})
+ } catch (error) {
+    throw error
+ }
+}
+
 module.exports={
     addInventory,
     getProduct,
     actualizar,
-    deleteProduct
+    deleteProduct,
+    agregarPresentacion,
+    updatequantityMedicament
 }
