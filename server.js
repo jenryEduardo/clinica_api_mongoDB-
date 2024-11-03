@@ -4,13 +4,15 @@ const app=express()
 require('dotenv').config();
 
 const inventoryRoutes=require('./src/routes/inventory.routes.js')
+const consultaRoutes = require('./src/routes/consulta.routes.js')
+const hostRoutes = require('./src/routes/hospitalizacion.routes.js')
 app.use(express.json());
 
 
-//PROFE LA VERDAD SOLO DEJE UNA COLECCION QUE ES INVENTARIO YA QUE LO DEMAS VI MEJOR EN POSTGRESQL YA QUE NINGUN DATO CAMBIA
-//MIENTRAS QUE EN INVENTARIO SI
-
 app.use('/inventory',inventoryRoutes)
+app.use('/consults',consultaRoutes)
+app.use('/hospitalizacion',hostRoutes)
+
 
 const port=process.env.PORT||4000;
 
