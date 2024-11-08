@@ -15,12 +15,9 @@ async function getProduct(req,res) {
     await encontrarProducto()
     res.status(201).json({exitoso:"productos encontrado"})
   } catch (error) {
-    console.log(error);
-    
+    console.log(error); 
   }
-
 }
-
 
 async function actualizar(req,res) {
   try {

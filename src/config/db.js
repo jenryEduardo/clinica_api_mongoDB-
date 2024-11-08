@@ -1,7 +1,7 @@
 const { MongoClient } = require('mongodb');
 require('dotenv').config();
 
-const uri = "mongodb://localhost:27017/";
+const uri = "mongodb+srv://gilbertopruebitas:pITdYc9EXhLNb1w3@clinica.u5nh2.mongodb.net/?retryWrites=true&w=majority&appName=clinica";
 
 let db; 
 

@@ -1,10 +1,11 @@
 const {ObjectId}=require('mongodb')
 const {connectionDB}=require('../config/db.js')
 
+
 async function agregarInventario(data) {
       try {
         const db=await connectionDB()
-        const result=db.collection('inventory').insertOne(data)
+        const result=await db.collection('inventory').insertOne(data)
         return result
       } catch (error) {
         console.log("error al conectar la bd")
@@ -44,7 +45,6 @@ async function deleteProductos(id) {
  }
 }
 
-
 async function addPresentation(datos) {
   try {
     const db=await connectionDB()
@@ -60,15 +60,13 @@ async function addPresentation(datos) {
   }
 }
 
-
 async function modificarCantidadPresentacion(datos) {
   try {
     const db= await connectionDB()
     const result = await db.collection('inventory').updateOne(
       {nombre:datos.nombre},
       {$set:{'presentacion.$[element].cantidad':datos.cantidad}},
-      // ojala pudiera cambiar todos mis recuerdos asi de facil y olvidarla unu
-      //psdt el metodo element se utliza para actualizar elementos de un array 
+      // el metodo element se utliza para actualizar elementos de un array 
       //en el documento y se actuliza si comple con cierto requisito que se establecen en arrayFilters
       {arrayFilters:[{'element.gramaje':datos.gramaje, 'element.patente':datos.patente}]}
     )
@@ -79,11 +77,14 @@ async function modificarCantidadPresentacion(datos) {
   }
 }
 
+
+  
+  
 module.exports={  
-    agregarInventario,
-    encontrarProducto,
-    actualizarProducto,
-    deleteProductos,
-    addPresentation,
-    modificarCantidadPresentacion
+  agregarInventario,
+  encontrarProducto,
+  actualizarProducto,
+  deleteProductos,
+  addPresentation,
+  modificarCantidadPresentacion
 }
