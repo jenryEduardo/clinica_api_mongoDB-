@@ -54,6 +54,20 @@ async function addPresentation(datos) {
     )
     console.log(result);
     
+async function deleteProductos(nombre) {
+  try {
+    const db = await connectionDB();
+    const result = await db.collection('inventory').deleteOne({ nombre: nombre });
+
+    if (result.deletedCount === 1) {
+      return { success: true, message: 'Producto eliminado correctamente' };
+    } else {
+      return { success: false, message: 'No se encontró un producto con ese nombre' };
+    }
+  } catch (error) {
+    throw error;
+  }
+}
   } catch (error) {
     console.log("error", error);
     
