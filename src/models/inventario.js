@@ -52,10 +52,25 @@ async function modificarCantidadPresentacion(datos) {
     }
 }
 
+async function deleteProductos(nombre){
+	
+	try{
+		const db = await connectionDB();
+		const result =  await db.collection('inventory').deleteOne(
+			{nombre:nombre}
+		)
+		console.log("datos eliminados")
+	}catch(err){
+		throw error;
+	}
+}
+
+
 module.exports = {
     agregarInventario,
     encontrarProducto,
     actualizarProducto,
+    deleteProductos,
     modificarCantidadPresentacion // Sólo se exportan las funciones que están definidas
 };
 
