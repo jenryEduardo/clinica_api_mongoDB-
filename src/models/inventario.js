@@ -28,17 +28,17 @@ async function encontrarProducto() {
 async function actualizarProducto(id,data) {
     try {
       const db=await connectionDB()
-      const update=db.collection('inventory').updateOne({_id:new ObjectId(id)},{$set:data})
+      const update=await db.collection('inventory').updateOne({_id:new ObjectId(id)},{$set:data})
       return update
     } catch (error) {
-      console.log("no se pudo conectar a la bd ",error);
+      console.log("no se pudo conectar a la bd",error);
     }
 }
 
 async function deleteProductos(id) {
  try {
   const db=await connectionDB()
-  const result=db.collection('inventory').deleteOne({_id:new ObjectId(id)})
+  const result=await db.collection('inventory').deleteOne({_id:new ObjectId(id)})
   return result
  } catch (error) {
   throw error
