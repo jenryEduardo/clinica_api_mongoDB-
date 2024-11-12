@@ -35,15 +35,15 @@ async function actualizarProducto(id,data) {
     }
 }
 
-async function deleteProductos(nombre) {
- try {
-  const db=await connectionDB()
-  const result=await db.collection('inventory').deleteOne({nombre:nombre})
-  return result
- } catch (error) {
-  throw error
- }
-}
+//async function deleteProductos(nombre) {
+// try {
+//  const db=await connectionDB()
+//  const result=await db.collection('inventory').deleteOne({nombre:nombre})
+//  return result
+// } catch (error) {
+//  throw error
+// }
+//}
 
 async function addPresentation(datos) {
   try {
@@ -54,10 +54,10 @@ async function addPresentation(datos) {
     )
     console.log(result);
     
-async function deleteProductos(nombre) {
+async function deleteProductos(id) {
   try {
     const db = await connectionDB();
-    const result = await db.collection('inventory').deleteOne({ nombre: nombre });
+    const result = await db.collection('inventory').deleteOne({ _id:new ObjectId(id)});
 
     if (result.deletedCount === 1) {
       return { success: true, message: 'Producto eliminado correctamente' };
