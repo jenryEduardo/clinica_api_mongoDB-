@@ -12,8 +12,8 @@ async function addInventory(req,res) {
 
 async function getProduct(req,res) {
   try {
-    await encontrarProducto()
-    res.status(201).json({exitoso:"productos encontrado"})
+    const medicamentos = await encontrarProducto()
+    res.status(201).json(medicamentos)
   } catch (error) {
     console.log(error); 
   }
