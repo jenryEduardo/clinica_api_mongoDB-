@@ -7,6 +7,17 @@ async function agregarInventario(data) {
         const db=await connectionDB()
         const result=await db.collection('inventory').insertOne(data)
         return result
+async function encontrarProducto(req, res) {
+    try {
+        const db = await connectionDB();
+        const result = await db.collection('inventory').find().toArray();
+        console.log(result);  // Esto se mantiene si deseas ver los datos en la consola del servidor
+	return result          // Devuelve los datos en formato JSON al cliente
+    } catch (error) {
+        console.log("No se pudo conectar a la colección", error);
+         // Responde con un mensaje de error si algo falla
+    }
+}
       } catch (error) {
         console.log("error al conectar la bd")
       }
