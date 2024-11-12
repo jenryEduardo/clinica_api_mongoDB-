@@ -1,3 +1,15 @@
+async function getProduct(req, res) {
+  try {
+    const productos = await encontrarProducto();  // Recupera los productos
+    if (productos.length === 0) {
+      return res.status(404).json({ mensaje: "No se encontraron productos" });  // En caso de que no haya productos
+    }
+    return res.status(200).json(productos);  // Devuelve los productos encontrados
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ mensaje: "Error al obtener productos" });  // Respuesta en caso de error
+  }
+}
 const {agregarInventario,encontrarProducto, actualizarProducto, deleteProductos, addPresentation, modificarCantidadPresentacion} =require('../models/inventario.js')
 
 async function addInventory(req,res) {
