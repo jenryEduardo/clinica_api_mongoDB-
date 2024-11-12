@@ -68,7 +68,8 @@ module.exports={
     addInventory,
     getProduct,
     actualizar,
-    deleteProduct,
+     deleteProduct,
     agregarPresentacion,
     updatequantityMedicament
 }
+ 
