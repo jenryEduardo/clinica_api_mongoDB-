@@ -35,10 +35,10 @@ async function actualizarProducto(id,data) {
     }
 }
 
-async function deleteProductos(id) {
+async function deleteProductos(nombre) {
  try {
   const db=await connectionDB()
-  const result=await db.collection('inventory').deleteOne({_id:new ObjectId(id)})
+  const result=await db.collection('inventory').deleteOne({nombre:nombre})
   return result
  } catch (error) {
   throw error

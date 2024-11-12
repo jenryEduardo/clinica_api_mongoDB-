@@ -45,8 +45,8 @@ async function agregarPresentacion(req,res) {
 async function deleteProduct(req,res) {
 try {
   console.log(req.params);
-  const id=req.params
- await deleteProductos(id)
+  const name=req.params
+ await deleteProductos(name)
   res.status(201).json({succesfull:"producto eliminado con exito"})
 } catch (error) {
   console.log(error);
