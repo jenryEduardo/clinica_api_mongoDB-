@@ -1,5 +1,5 @@
 
-const { createUser, obtenerUser } = require('../models/User.js');
+const { createUser, obtenerUser, editUser } = require('../models/User.js');
 
 async function addUser(req, res) {
     try {
@@ -21,8 +21,20 @@ async function getUser() {
     }
 }
 
+async function edit(req,res) {
+    try {
+        const { id } = req.params
+        const data = req.body
+        await editUser(id,data)
+        res.status(201).json({ok:"Datos actualizados"})
+    } catch (error) {
+        throw error
+    }
+}
+
 module.exports = {
     addUser,
-    getUser
+    getUser,
+    edit
 };
 
