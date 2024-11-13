@@ -1,90 +1,76 @@
-const {ObjectId}=require('mongodb')
-const {connectionDB}=require('../config/db.js')
+const { ObjectId } = require('mongodb');
+const { connectionDB } = require('../config/db.js');
 
-
+// Función para agregar un nuevo producto
 async function agregarInventario(data) {
-      try {
-        const db=await connectionDB()
-        const result=await db.collection('inventory').insertOne(data)
-        return result
-      } catch (error) {
-        console.log("error al conectar la bd")
-      }
+    try {
+        const db = await connectionDB();
+        const result = await db.collection('inventory').insertOne(data);
+        return result;
+    } catch (error) {
+        console.log("Error al conectar la base de datos", error);
+    }
 }
 
-
+// Función para obtener todos los productos
 async function encontrarProducto() {
     try {
-        const db=await connectionDB()
-        const result=await db.collection('inventory').find({}).toArray()
-        console.log(result)
-        return result
+        const db = await connectionDB();
+        const result = await db.collection('inventory').find({}).toArray();
+        console.log(result);
+        return result;
     } catch (error) {
-        console.log("no se pudo conectar a la coleccion")
+        console.log("No se pudo conectar a la colección", error);
     }
 }
 
-
-async function actualizarProducto(id,data) {
+// Función para actualizar un producto
+async function actualizarProducto(id, data) {
     try {
-      const db=await connectionDB()
-      const update=await db.collection('inventory').updateOne({_id:new ObjectId(id)},{$set:data})
-      return update
+        const db = await connectionDB();
+        const update = await db.collection('inventory').updateOne({ _id: new ObjectId(id) }, { $set: data });
+        return update;
     } catch (error) {
-      console.log("no se pudo conectar a la bd",error);
+        console.log("No se pudo conectar a la base de datos", error);
     }
 }
 
-async function deleteProductos(id) {
- try {
-  const db=await connectionDB()
-  const result=await db.collection('inventory').deleteOne({_id:new ObjectId(id)})
-  return result
- } catch (error) {
-  throw error
- }
-}
-
-async function addPresentation(datos) {
-  try {
-    const db=await connectionDB()
-    const result =await db.collection('inventory').updateOne(
-      {nombre:datos.nombre},
-      {$push:{presentacion:datos.presentacion}} 
-    )
-    console.log(result);
-    
-  } catch (error) {
-    console.log("error", error);
-    
-  }
-}
-
+// Función para modificar la cantidad de presentación de un producto
 async function modificarCantidadPresentacion(datos) {
-  try {
-    const db= await connectionDB()
-    const result = await db.collection('inventory').updateOne(
-      {nombre:datos.nombre},
-      {$set:{'presentacion.$[element].cantidad':datos.cantidad}},
-      // el metodo element se utliza para actualizar elementos de un array 
-      //en el documento y se actuliza si comple con cierto requisito que se establecen en arrayFilters
-      {arrayFilters:[{'element.gramaje':datos.gramaje, 'element.patente':datos.patente}]}
-    )
+    try {
+        const db = await connectionDB();
+        const result = await db.collection('inventory').updateOne(
+            { nombre: datos.nombre },
+            { $set: { 'presentacion.$[element].cantidad': datos.cantidad } },
+            {
+                arrayFilters: [{ 'element.gramaje': datos.gramaje, 'element.patente': datos.patente }]
+            }
+        );
+        console.log("Datos actualizados: ", result);
+    } catch (error) {
+        throw error;
+    }
+}
 
-    console.log("datos actualizados "+result);
-  } catch (error) {
-    throw error
-  }
+async function deleteProductos(nombre){
+	
+	try{
+		const db = await connectionDB();
+		const result =  await db.collection('inventory').deleteOne(
+			{nombre:nombre}
+		)
+		console.log("datos eliminados")
+	}catch(err){
+		throw error;
+	}
 }
 
 
-  
-  
-module.exports={  
-  agregarInventario,
-  encontrarProducto,
-  actualizarProducto,
-  deleteProductos,
-  addPresentation,
-  modificarCantidadPresentacion
-}
+module.exports = {
+    agregarInventario,
+    encontrarProducto,
+    actualizarProducto,
+    deleteProductos,
+    modificarCantidadPresentacion // Sólo se exportan las funciones que están definidas
+};
+
