@@ -31,16 +31,6 @@ async function actualizar(req,res) {
 }
 
 
-async function agregarPresentacion(req,res) {
-   const datos=req.body
-    try {   
-      await addPresentation(datos)
-      res.status(201).json({succesfull:"presentacion agregada exitosamente"})
-    } catch (error) {
-      throw error
-    }
-}
-
 
 async function deleteProduct(req,res) {
 try {
@@ -69,7 +59,6 @@ module.exports={
     getProduct,
     actualizar,
      deleteProduct,
-    agregarPresentacion,
     updatequantityMedicament
 }
  

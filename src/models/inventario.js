@@ -5,12 +5,20 @@ const { connectionDB } = require('../config/db.js');
 async function agregarInventario(data) {
     try {
         const db = await connectionDB();
+        
+        // Verificar que 'data.presentacion' sea un array vacío
+        if (!data.presentacion || !Array.isArray(data.presentacion)) {
+            data.presentacion = []; // Si no hay presentaciones, inicializamos el array vacío
+        }
+        
+        // Insertar el medicamento con el array vacío de presentaciones
         const result = await db.collection('inventory').insertOne(data);
         return result;
     } catch (error) {
-        console.log("Error al conectar la base de datos", error);
+        console.log("Error al agregar inventario", error);
     }
 }
+
 
 // Función para obtener todos los productos
 async function encontrarProducto() {
@@ -52,14 +60,17 @@ async function modificarCantidadPresentacion(datos) {
     }
 }
 
-async function deleteProductos(nombre){
+async function deleteProductos(name){
 	
 	try{
 		const db = await connectionDB();
 		const result =  await db.collection('inventory').deleteOne(
-			{nombre:nombre}
+			{nombre:name}
 		)
-		console.log("datos eliminados")
+    if(result){
+      console.log("datos eliminados")
+    }
+	
 	}catch(err){
 		throw error;
 	}
@@ -71,6 +82,6 @@ module.exports = {
     encontrarProducto,
     actualizarProducto,
     deleteProductos,
-    modificarCantidadPresentacion // Sólo se exportan las funciones que están definidas
+    modificarCantidadPresentacion
 };
 
