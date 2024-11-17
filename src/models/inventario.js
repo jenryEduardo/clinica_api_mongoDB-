@@ -3,19 +3,31 @@ const { connectionDB } = require('../config/db.js');
 
 // Función para agregar un nuevo producto
 async function agregarInventario(data) {
+
+        data.presentacion=[]
+
     try {
+        console.log(data); 
         const db = await connectionDB();
-        
-        // Verificar que 'data.presentacion' sea un array vacío
-        if (!data.presentacion || !Array.isArray(data.presentacion)) {
-            data.presentacion = []; // Si no hay presentaciones, inicializamos el array vacío
-        }
-        
-        // Insertar el medicamento con el array vacío de presentaciones
         const result = await db.collection('inventory').insertOne(data);
         return result;
     } catch (error) {
         console.log("Error al agregar inventario", error);
+    }
+}
+
+
+async function addPresentacion(id,data) {
+    try {
+        const db = await connectionDB()
+        await db.collection('inventory').findOneAndUpdate(
+            {_id:new ObjectId(id)},
+            {$push:{presentacion : data}}
+        )
+        console.log(data);
+    } catch (error) {
+            console.log(error);
+            
     }
 }
 
@@ -47,7 +59,7 @@ async function actualizarProducto(id, data) {
 async function modificarCantidadPresentacion(datos) {
     try {
         const db = await connectionDB();
-        const result = await db.collection('inventory').updateOne(
+        const result = await db.collection('inventory').updateMany(
             { nombre: datos.nombre },
             { $set: { 'presentacion.$[element].cantidad': datos.cantidad } },
             {
@@ -82,6 +94,7 @@ module.exports = {
     encontrarProducto,
     actualizarProducto,
     deleteProductos,
-    modificarCantidadPresentacion
+    modificarCantidadPresentacion,
+    addPresentacion
 };
 
