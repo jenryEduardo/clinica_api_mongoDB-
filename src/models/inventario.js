@@ -33,10 +33,10 @@ async function addPresentacion(id,data) {
 
 
 // Función para obtener todos los productos
-async function encontrarProducto() {
+async function encontrarProducto(nombreFormula) {
     try {
         const db = await connectionDB();
-        const result = await db.collection('inventory').find({}).toArray();
+        const result = await db.collection('inventory').find({nombre:nombreFormula}).toArray();
         console.log(result);
         return result;
     } catch (error) {

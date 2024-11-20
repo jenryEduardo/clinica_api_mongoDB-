@@ -1,5 +1,6 @@
 const {agregarInventario,encontrarProducto, actualizarProducto, deleteProductos,addPresentacion, modificarCantidadPresentacion} =require('../models/inventario.js')
-
+const { connectionDB } = require('../config/db.js');
+const { ObjectId } = require('mongodb');
 async function addInventory(req,res) {
    try {
     const nombre=req.body
@@ -16,22 +17,36 @@ async function addPresentations(req,res) {
 try {
   const {id} = req.params
   const data = req.body
-  await addPresentacion(id,data)
-  res.status(201).json({ok:"dv"})
+  const db = await connectionDB()
+ const add = await db.collection('inventory').findOneAndUpdate(
+      {_id:new ObjectId(id)},
+      {$push:{presentacion : data}}
+  )
+  res.status(201).json({ok:add})
 } catch (error) {
   console.log(error);
   
 }
 }
-
-async function getProduct(req,res) {
+async function getProduct(req, res) {
   try {
-   const ok = await encontrarProducto()
-    res.status(201).json({exitoso:ok})
+    const { nombreFormula } = req.params; // Extrae correctamente el parámetro
+    const db = await connectionDB();
+    
+    // Usa findOne en lugar de find si esperas un solo documento
+    const result = await db.collection('inventory').findOne({ nombre: nombreFormula });
+    
+    if (result) {
+      res.status(200).json({ ok: result.presentacion });
+    } else {
+      res.status(404).json({ error: "No se encontró el medicamento" });
+    }
   } catch (error) {
-    console.log(error); 
+    console.log(error);
+    res.status(500).json({ error: "Error en el servidor" });
   }
 }
+
 
 async function actualizar(req,res) {
   try {
