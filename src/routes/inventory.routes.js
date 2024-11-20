@@ -6,7 +6,8 @@ router.post('/add-inventory',getToken, inventoryController.addInventory);
 router.get('/view/:nombreFormula',getToken, inventoryController.getProduct);
 router.put('/actualizar/:id',getToken, inventoryController.actualizar);
 router.delete('/eliminar/:id',getToken,inventoryController.deleteProduct)
-router.put('/add/:id',getToken,inventoryController.addPresentations)
+router.put('/add/:nombre',getToken,inventoryController.addPresentations)
+router.get('/view-all',inventoryController.nameProduct)
 //updatequantityMedicament
 module.exports = router;
 

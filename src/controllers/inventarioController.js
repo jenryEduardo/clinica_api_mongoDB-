@@ -15,11 +15,11 @@ async function addInventory(req,res) {
 
 async function addPresentations(req,res) {
 try {
-  const {id} = req.params
+  const {nombre} = req.params
   const data = req.body
   const db = await connectionDB()
  const add = await db.collection('inventory').findOneAndUpdate(
-      {_id:new ObjectId(id)},
+      {nombre : nombre},
       {$push:{presentacion : data}}
   )
   res.status(201).json({ok:add})
@@ -30,14 +30,13 @@ try {
 }
 async function getProduct(req, res) {
   try {
-    const { nombreFormula } = req.params; // Extrae correctamente el parámetro
+    const { nombreFormula } = req.params;
     const db = await connectionDB();
     
-    // Usa findOne en lugar de find si esperas un solo documento
     const result = await db.collection('inventory').findOne({ nombre: nombreFormula });
     
     if (result) {
-      res.status(200).json({ ok: result.presentacion });
+      res.status(200).json( result.presentacion );
     } else {
       res.status(404).json({ error: "No se encontró el medicamento" });
     }
@@ -58,6 +57,20 @@ async function actualizar(req,res) {
    console.log(error)
   }
 }
+
+async function nameProduct(req,res) {
+  try {
+    const db = await connectionDB();
+    const result = await db.collection('inventory').find({}).toArray()
+    if(!result){
+      console.log("no existe registros");
+    }
+    res.status(201).json(result)
+  } catch (error) {
+    console.log("error");
+  }
+}
+
 
 
 
@@ -89,6 +102,7 @@ module.exports={
     actualizar,
      deleteProduct,
     updatequantityMedicament,
-    addPresentations
+    addPresentations,
+    nameProduct
 }
  

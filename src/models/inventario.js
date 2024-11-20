@@ -44,6 +44,7 @@ async function encontrarProducto(nombreFormula) {
     }
 }
 
+
 // Función para actualizar un producto
 async function actualizarProducto(id, data) {
     try {
