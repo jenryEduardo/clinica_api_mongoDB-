@@ -9,7 +9,7 @@ async function agregarConsulta(data) {
         const result =await db.collection('consulta').insertOne(data)
         return result
     } catch (error) {
-        throw error
+      console.log("error");
     }
     
 }
@@ -21,7 +21,7 @@ async function editarConsultaPorId(id,data) {
     const result = await db.collection('consulta').updateOne({_id:new ObjectId(id)},{$set:data})
     return  result
  } catch (error) {
-    throw error
+  console.log("error");
  }
 }
 

@@ -9,7 +9,7 @@ async function createUser(user) {
         return result;
     } catch (error) {
         console.error('Error al crear el usuario:', error.message);
-        throw error;
+        console.log("error");
     }
 }
 

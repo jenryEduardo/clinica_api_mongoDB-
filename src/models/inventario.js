@@ -68,7 +68,7 @@ async function modificarCantidadPresentacion(datos) {
         );
         console.log("Datos actualizados: ", result);
     } catch (error) {
-        throw error;
+        console.log("error");
     }
 }
 
@@ -84,7 +84,7 @@ async function deleteProductos(name){
     }
 	
 	}catch(err){
-		throw error;
+		console.log("error");
 	}
 }
 

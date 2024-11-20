@@ -7,7 +7,7 @@ async function agregarAHospitalizacion(data) {
         const result = await db.collection('hospitalizacion').insertOne(data)
         return result
     } catch (error) {
-        throw error
+      console.log("error");
     }
 }
 
@@ -18,7 +18,7 @@ async function editarHospitalizacionPorNombre(nombrePaciente,data) {
        const result = await db.collection('hospitalizacion').updateOne({nombrePaciente:nombrePaciente},{$set:data})
        return  result
     } catch (error) {
-       throw error
+      console.log("error");
     }
    }
    
