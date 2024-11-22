@@ -18,20 +18,36 @@ async function agregarConsulta(data) {
 }
 
 
-async function editarConsultaPorId(id,data) {
- try {
-    const db = await connectionDB()
-    const result = await db.collection('consulta').updateOne({_id:new ObjectId(id)},{$set:data})
-    return  result
- } catch (error) {
-  console.log("error");
- }
+async function editarConsultaPorId(id, data) {
+  try {
+    const db = await connectionDB();
+    if (data._id) {
+      delete data._id;
+    }
+    const result = await db.collection('consulta').updateOne(
+      { id: id }, 
+      { $set: data } 
+    );
+
+    return result;
+  } catch (error) {
+    throw error;
+  }
+
 }
 
+
+
 async function verConsulta() {
-    const db =await connectionDB()
-    const result =await db.collection('consulta').find({}).toArray()
-    console.log(result);
+try {
+  const db =await connectionDB()
+  const result =await db.collection('consulta').find({}).toArray()
+  console.log(result);
+  return result
+} catch (error) {
+  console.log("errpr");
+  
+}
     
 }
 
@@ -48,14 +64,17 @@ async function verConsultaPorId(nombre) {
 
 async function eliminarPorId(id) {
   try {
-    const db= await connectionDB()
-    const borrar = await db.collection('consulta').deleteOne({_id:new ObjectId(id)})
-    return borrar
+    const db = await connectionDB();
+
+    const borrar = await db.collection('consulta').deleteOne({ id: id });
+
+    return borrar;
   } catch (error) {
-    console.log(error);
+    console.error("Error al eliminar la consulta:", error);
+    throw error; 
   }
-    
 }
+
 
 module.exports = {
     agregarConsulta,
