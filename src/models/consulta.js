@@ -6,6 +6,9 @@ async function agregarConsulta(data) {
   
     try {
         const db = await connectionDB()
+        if(!data){
+            console.log("ingrese valores a los campos");
+        }
         const result =await db.collection('consulta').insertOne(data)
         return result
     } catch (error) {

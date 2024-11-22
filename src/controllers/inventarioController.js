@@ -4,8 +4,10 @@ const { ObjectId } = require('mongodb');
 async function addInventory(req,res) {
    try {
     const nombre=req.body
-    console.log(nombre);
-    
+    if(!nombre){
+      console.log("por favor ingrese valores validos en los campos");
+      return 0
+  }
     await agregarInventario(nombre)
     res.status(201).json({exitoso:"nuevo producto agregado al inventario"})
    } catch (error) {
@@ -18,6 +20,10 @@ try {
   const {nombre} = req.params
   const data = req.body
   const db = await connectionDB()
+  if(!data || !nombre){
+      console.log("por favor ingrese valores validos en los campos");
+      return 0
+  }
  const add = await db.collection('inventory').findOneAndUpdate(
       {nombre : nombre},
       {$push:{presentacion : data}}
@@ -51,6 +57,10 @@ async function actualizar(req,res) {
   try {
     const {id}=req.params
     const datosactualizados=req.body
+    if(!id || !datosactualizados){
+      console.log("no se pueden mandar datos nulos o vacios");
+      return
+    }
     await actualizarProducto(id,datosactualizados)
     res.status(201).json({succesfull:"producto actualizado correctamente"})
   } catch (error) {
@@ -61,7 +71,7 @@ async function actualizar(req,res) {
 async function nameProduct(req,res) {
   try {
     const db = await connectionDB();
-    const result = await db.collection('inventory').find({}).toArray()
+    const result = await db.collection('inventory').find().toArray()
     if(!result){
       console.log("no existe registros");
     }
