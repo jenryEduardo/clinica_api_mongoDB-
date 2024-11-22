@@ -1,101 +1,118 @@
-const { ObjectId } = require('mongodb');
+const {agregarInventario,encontrarProducto, actualizarProducto, deleteProductos,addPresentacion, modificarCantidadPresentacion} =require('../models/inventario.js')
 const { connectionDB } = require('../config/db.js');
+const { ObjectId } = require('mongodb');
+async function addInventory(req,res) {
+   try {
+    const nombre=req.body
+    if(!nombre){
+      console.log("por favor ingrese valores validos en los campos");
+      return 0
+  }
+    await agregarInventario(nombre)
+    res.status(201).json({exitoso:"nuevo producto agregado al inventario"})
+   } catch (error) {
+        console.log(error)
+   }
+}
 
-// Función para agregar un nuevo producto
-async function agregarInventario(data) {
-
-        data.presentacion=[]
-
-    try {
-        console.log(data); 
-        const db = await connectionDB();
-        const result = await db.collection('inventory').insertOne(data);
-        return result;
-    } catch (error) {
-        console.log("Error al agregar inventario", error);
+async function addPresentations(req,res) {
+try {
+  const {nombre} = req.params
+  const data = req.body
+  const db = await connectionDB()
+  if(!data || !nombre){
+      console.log("por favor ingrese valores validos en los campos");
+      return 0
+  }
+ const add = await db.collection('inventory').findOneAndUpdate(
+      {nombre : nombre},
+      {$push:{presentacion : data}}
+  )
+  res.status(201).json({ok:add})
+} catch (error) {
+  console.log(error);
+  
+}
+}
+async function getProduct(req, res) {
+  try {
+    const { nombreFormula } = req.params;
+    const db = await connectionDB();
+    
+    const result = await db.collection('inventory').findOne({ nombre: nombreFormula });
+    
+    if (result) {
+      res.status(200).json( result.presentacion );
+    } else {
+      res.status(404).json({ error: "No se encontró el medicamento" });
     }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Error en el servidor" });
+  }
 }
 
 
-async function addPresentacion(id,data) {
-    try {
-        const db = await connectionDB()
-        await db.collection('inventory').findOneAndUpdate(
-            {_id:new ObjectId(id)},
-            {$push:{presentacion : data}}
-        )
-        console.log(data);
-    } catch (error) {
-            console.log(error);
-            
+async function actualizar(req,res) {
+  try {
+    const {id}=req.params
+    const datosactualizados=req.body
+    if(!id || !datosactualizados){
+      console.log("no se pueden mandar datos nulos o vacios");
+      return
     }
+    await actualizarProducto(id,datosactualizados)
+    res.status(201).json({succesfull:"producto actualizado correctamente"})
+  } catch (error) {
+   console.log(error)
+  }
+}
+
+async function nameProduct(req,res) {
+  try {
+    const db = await connectionDB();
+    const result = await db.collection('inventory').find().toArray()
+    if(!result){
+      console.log("no existe registros");
+    }
+    res.status(201).json(result)
+  } catch (error) {
+    console.log("error");
+  }
 }
 
 
-// Función para obtener todos los productos
-async function encontrarProducto(nombreFormula) {
-    try {
-        const db = await connectionDB();
-        const result = await db.collection('inventory').find({nombre:nombreFormula}).toArray();
-        console.log(result);
-        return result;
-    } catch (error) {
-        console.log("No se pudo conectar a la colección", error);
-    }
+
+
+async function deleteProduct(req,res) {
+try {
+  console.log(req.params);
+  const {name}=req.params
+ await deleteProductos(name)
+  res.status(201).json({succesfull:"producto eliminado con exito"})
+} catch (error) {
+  console.log(error);
+}
 }
 
 
-// Función para actualizar un producto
-async function actualizarProducto(id, data) {
-    try {
-        const db = await connectionDB();
-        const update = await db.collection('inventory').updateOne({ _id: new ObjectId(id) }, { $set: data });
-        return update;
-    } catch (error) {
-        console.log("No se pudo conectar a la base de datos", error);
-    }
+async function updatequantityMedicament(req,res) {
+ try {
+  const datos=req.body
+  await modificarCantidadPresentacion(datos)
+  res.status(201).json({succesfull:"datos actualizados"})
+ } catch (error) {
+  console.log(error);
+ }
 }
 
-// Función para modificar la cantidad de presentación de un producto
-async function modificarCantidadPresentacion(datos) {
-    try {
-        const db = await connectionDB();
-        const result = await db.collection('inventory').updateMany(
-            { nombre: datos.nombre },
-            { $set: { 'presentacion.$[element].cantidad': datos.cantidad } },
-            {
-                arrayFilters: [{ 'element.gramaje': datos.gramaje, 'element.patente': datos.patente }]
-            }
-        );
-        console.log("Datos actualizados: ", result);
-    } catch (error) {
-        console.log("error");
-    }
+module.exports={
+    addInventory,
+    getProduct,
+    actualizar,
+     deleteProduct,
+    updatequantityMedicament,
+    addPresentations,
+    nameProduct
 }
-
-async function deleteProductos(name){
-	
-	try{
-		const db = await connectionDB();
-		const result =  await db.collection('inventory').deleteOne(
-			{nombre:name}
-		)
-    if(result){
-      console.log("datos eliminados")
-    }
-	
-	}catch(err){
-		console.log("error");
-	}
-}
-
-
-module.exports = {
-    agregarInventario,
-    encontrarProducto,
-    actualizarProducto,
-    deleteProductos,
-    modificarCantidadPresentacion,
-    addPresentacion
-};
-
+ 
