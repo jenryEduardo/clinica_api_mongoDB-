@@ -14,31 +14,43 @@ async function addConsult(req,res) {
 }
 
 
-async function updateConsult(req,res) {
-   try {
-    const {id} = req.params
-    const data = req.body
-    await editarConsultaPorId(id,data)
-    res.status(201).json({succesfull:"actualizacion exitosa"})
-   } catch (error) {
-    throw error
-   }
-}
-
-async function deleteConsultById(req,res) {
-try {
-    const {id} = req.params
-    await eliminarPorId(id)
-    res.status(201).json({succesfull:"consulta eliminada con exito"})
-} catch (error) {
-    throw error
-}
-}
-
-async function getConsult(req,res) {
+async function updateConsult(req, res) {
     try {
-        await verConsulta()
-        res.status(201).json({ok:"solicitud realizado con exito"})
+      const { id } = req.params; 
+      const data = req.body;
+      const resultado = await editarConsultaPorId(id, data);
+      if (resultado.modifiedCount > 0) {
+        res.status(200).json({ success: true, message: "Consulta actualizada con éxito" });
+      } else {
+        res.status(404).json({ success: false, message: "Consulta no encontrada" });
+      }
+    } catch (error) {
+      console.error("Error actualizando la consulta:", error);
+      res.status(500).json({ success: false, error: error.message });
+    }
+  }
+  
+
+async function deleteConsultById(req, res) {
+    try {
+      const { id } = req.params;
+  
+      await eliminarPorId(id);
+  
+      return res.status(200).json({ success: "Consulta eliminada con éxito." });
+    } catch (error) {
+      console.error("Error al eliminar la consulta:", error);
+  
+      return res.status(500).json({ error: "Error interno del servidor." });
+    }
+  }
+  
+  
+
+async function getConsult(req,res) {  
+    try {
+       const result = await verConsulta()
+        res.status(201).json(result)
     } catch (error) {
         throw error
     }
