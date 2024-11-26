@@ -6,8 +6,12 @@ const { get } = require('../routes/inventory.routes')
 async function addConsult(req,res) {
     try {
     const data = req.body
-    await agregarConsulta(data)
-    res.status(201).json({succesfull:"consulta creada"})
+    if(!data){
+      console.log("ingrese todos los campos");
+    }else{
+      await agregarConsulta(data)
+      res.status(201).json({succesfull:"consulta creada"})
+    }
     } catch (error) {
         throw error
     }

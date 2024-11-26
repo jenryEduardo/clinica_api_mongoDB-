@@ -71,13 +71,16 @@ async function actualizar(req,res) {
 async function nameProduct(req,res) {
   try {
     const db = await connectionDB();
-    const result = await db.collection('inventory').find().toArray()
+    const result = await db.collection('inventory').find({},{ projection: { presentacion: 1 } }).toArray()
+
     if(!result){
       console.log("no existe registros");
     }
-    res.status(201).json(result)
+    const presentaciones = result.flatMap(item => item.presentacion);
+
+    res.status(201).json(presentaciones)
   } catch (error) {
-    console.log("error");
+    console.log("error: ",error);
   }
 }
 
