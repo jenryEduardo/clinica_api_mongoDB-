@@ -1,6 +1,7 @@
 const {agregarAHospitalizacion,editarHospitalizacionPorNombre
     ,eliminarPorId,verHospitalizacionPorNombrePaciente,verHospitalizaciones
 } = require('../models/hospitalizacion.js')
+const { connectionDB } = require('../config/db.js');
 
 async function addHospitalitation(req,res) {
     try {
@@ -36,17 +37,19 @@ async function deleteById(req,res) {
 async function viewHostByName(req,res) {
     try {
         const {nombrePaciente} = req.params
-        await verHospitalizacionPorNombrePaciente(nombrePaciente)
-        res.status(201).json({ok:"solicitud realizada con exito"})
+        const db =await connectionDB()
+        const result =await db.collection('hospitalizacion').find({nombrePaciente:nombrePaciente}).toArray()
+        res.status(201).json(result)
     } catch (error) {
         throw error
     }
 }
 
-async function viewHost() {
+async function viewHost(req,res) {
     try {
-        await verHospitalizaciones()
-        res.status(201).json({ok:"solicitud con exito"})
+        const db =await connectionDB()
+        const result =await db.collection('hospitalizacion').find({}).toArray()
+        res.status(201).json(result)
     } catch (error) {
         throw error
     }
