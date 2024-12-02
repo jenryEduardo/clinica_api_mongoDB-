@@ -39,7 +39,7 @@ async function viewHostByName(req,res) {
         const {nombrePaciente} = req.params
         const db =await connectionDB()
         const result =await db.collection('hospitalizacion').find({nombrePaciente:nombrePaciente}).toArray()
-        res.status(201).json(result)
+        res.status(201).json(result)    
     } catch (error) {
         throw error
     }

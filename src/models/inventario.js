@@ -57,9 +57,7 @@ async function actualizarProducto(id, data) {
 }
 
 // Función para modificar la cantidad de presentación de un producto
-async function modificarCantidadPresentacion(nombre,datos) {
-
-    console.log(nombre,datos.gramaje);
+async function modificarCantidadPresentacion(nombre,gramaje,precio) {
 
     try {
         const db = await connectionDB();
@@ -67,10 +65,10 @@ async function modificarCantidadPresentacion(nombre,datos) {
         const result = await db.collection('inventory').updateOne(
             { nombre:nombre},
             { $set: { 
-                'presentacion.$[element].precio': datos.precio
+                'presentacion.$[element].precio': precio
             } },
             {
-                arrayFilters: [{ 'element.gramaje': datos.gramaje }]
+                arrayFilters: [{ 'element.gramaje': gramaje }]
             }
         );
         console.log("Datos actualizados: ", result);

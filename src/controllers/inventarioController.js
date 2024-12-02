@@ -135,9 +135,9 @@
 
   async function updatequantityMedicament(req,res) {
   try {
-    const datos=req.body
-    const {nombre} = req.params
-    await modificarCantidadPresentacion(nombre,datos)
+    const {precio}=req.body
+    const {nombre,gramaje} = req.params
+    await modificarCantidadPresentacion(nombre,gramaje,precio)
     res.status(201).json({succesfull:"datos actualizados"})
   } catch (error) {
     console.log(error);
