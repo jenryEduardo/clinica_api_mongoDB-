@@ -4,7 +4,7 @@ const router = express.Router();
 const {getToken} = require('../middleware/token.js')
 router.post('/add-inventory',getToken, inventoryController.addInventory);
 router.get('/view',getToken, inventoryController.getProduct);
-router.put('/actualizar/:id', inventoryController.actualizar);
+router.put('/actualizar/:nombre', inventoryController.actualizar);
 router.delete('/eliminar/:id',getToken,inventoryController.deleteProduct)
 router.put('/add/:nombre',getToken,inventoryController.addPresentations)
 router.get('/view-all',getToken,inventoryController.nameProduct)

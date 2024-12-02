@@ -57,18 +57,26 @@ async function actualizarProducto(id, data) {
 }
 
 // Función para modificar la cantidad de presentación de un producto
-async function modificarCantidadPresentacion(nombre,gramaje,precio) {
+async function modificarCantidadPresentacion(nombre,body) {
 
     try {
         const db = await connectionDB();
 
-        const result = await db.collection('inventory').updateOne(
+        const result = await db.collection('inventory').updateMany(
             { nombre:nombre},
-            { $set: { 
-                'presentacion.$[element].precio': precio
+            { $set: {
+                'presentacion.$[element].nombre': body.nombre,
+                'presentacion.$[element].precio': body.precio,
+                'presentacion.$[element].precioCompra': body.precioCompra,
+                'presentacion.$[element].cantidadCajas': body.cantidadCajas,
+                'presentacion.$[element].cantidadUnidadesCajas': body.cantidadUnidadesCajas,
+                'presentacion.$[element].patente': body.patente,
+                'presentacion.$[element].gramaje': body.gramaje,
+                'presentacion.$[element].presentacion': body.presentacion,
+                'presentacion.$[element].fechaCaducidad': body.fechaCaducidad,
             } },
             {
-                arrayFilters: [{ 'element.gramaje': gramaje }]
+                arrayFilters: [{ 'element.id': body.id }]
             }
         );
         console.log("Datos actualizados: ", result);

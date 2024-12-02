@@ -70,13 +70,13 @@
 
   async function actualizar(req,res) {
     try {
-      const {id}=req.params
-      const datosactualizados=req.body
-      if(!id || !datosactualizados){
+      const {nombre}=req.params
+      const body=req.body
+      if(!nombre || !body){
         console.log("no se pueden mandar datos nulos o vacios");
         return
       }
-      await actualizarProducto(id,datosactualizados)
+      await modificarCantidadPresentacion(nombre,body)
       res.status(201).json({succesfull:"producto actualizado correctamente"})
     } catch (error) {
     console.log(error)
