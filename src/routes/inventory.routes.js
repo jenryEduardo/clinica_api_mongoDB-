@@ -8,8 +8,8 @@ router.put('/actualizar/:nombre', inventoryController.actualizar);
 router.delete('/eliminar/:id',getToken,inventoryController.deleteProduct)
 router.put('/add/:nombre',getToken,inventoryController.addPresentations)
 router.get('/view-all',getToken,inventoryController.nameProduct)
-router.put('/update/:nombre/:gramaje',inventoryController.updatequantityMedicament)
-router.delete('/delete/:nombre/:id',inventoryController.eliminarPresentacion)
+router.put('/update/:nombre/:gramaje',getToken,inventoryController.updatequantityMedicament)
+router.delete('/delete/:nombre/:id',getToken,inventoryController.eliminarPresentacion)
 //updatequantityMedicament
 module.exports = router;
 
